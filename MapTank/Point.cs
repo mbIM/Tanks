@@ -3,8 +3,8 @@ namespace MapTank
 {
     public class Point
     {
-        private readonly int x;
-        private readonly int y;
+        private int x;
+        private int y;
 
         public Point(int x,int y)
         {
@@ -21,5 +21,17 @@ namespace MapTank
         {
             return this.y;
         }
+
+        public void SetX()
+        {
+            this.x = x;
+        }
+
+        public void SetY()
+        {
+            this.y = y;
+        }
+
+        
     }
 }
