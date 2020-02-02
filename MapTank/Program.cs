@@ -1,82 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace MapTank
 {
     class Program
     {
-        class Game
+
+        static void Main()
         {
-            static readonly int x = 80;
-            static readonly int y = 26;
-            static Walls walls;
+            int sideSize = 43;
+            
+            var mySuperKillerTank = new Tank(new Point(sideSize / 2, 10), sideSize - 1);
+            DrawField(sideSize, mySuperKillerTank.GetPosition(), "*");
 
-            static void Main()
-            {
-                Console.SetWindowSize(x + 1, y + 1);
-                Console.SetBufferSize(x + 1, y + 1);
-                Console.CursorVisible = false;
-                walls = new Walls(x, y, '#');
-            }
-        }
-        struct Point
-        {
-            public int x { get; set; }
-            public int y { get; set; }
-            public char ch { get; set; }
+            ConsoleKeyInfo input;
+            while (true) {
 
-            public static implicit operator Point((int, int, char) value) =>
-                new Point { x = value.Item1, y = value.Item2, ch = value.Item3 };
+                input = Console.ReadKey(true);
 
-            public void Draw()
-            {
-                DrawPoint(ch);
-            }
-            public void Clear()
-            {
-                DrawPoint(' ');
-            }
-            private void DrawPoint(char _ch)
-            {
-                Console.SetCursorPosition(x, y);
-                Console.Write(_ch);
-            }
-        }
-        class Walls
-        {
-            private char ch;
-            private List<Point> wall = new List<Point>();
-
-            public Walls(int x, int y, char ch)
-            {
-                this.ch = ch;
-                DrawHorizontal(x, 0);
-                DrawHorizontal(x, y);
-                DrawVertical(0, y);
-                DrawVertical(x, y);
-            }
-
-            private void DrawHorizontal(int x, int y)
-            {
-                for (int i = 0; i < x; i++)
-                {
-                    Point p = (i, y, ch);
-                    p.Draw();
-                    wall.Add(p);
+                if (ConsoleKey.UpArrow.Equals(input.Key)) {
+                    DrawField(sideSize, mySuperKillerTank.GoUp(), "*");
                 }
-            }
-            private void DrawVertical(int x, int y)
-            {
-                for (int i = 0; i < y; i++)
+
+                if (ConsoleKey.DownArrow.Equals(input.Key)) {
+                    DrawField(sideSize, mySuperKillerTank.GoDown(), "*");
+                }
+
+                if (ConsoleKey.LeftArrow.Equals(input.Key))
                 {
-                    Point p = (x, i, ch);
-                    p.Draw();
-                    wall.Add(p);
+                    DrawField(sideSize, mySuperKillerTank.GoLeft(), "*");
+                }
+
+                if (ConsoleKey.RightArrow.Equals(input.Key))
+                {
+                    DrawField(sideSize, mySuperKillerTank.GoRight(), "*");
+                }
+
+            }
+        }
+
+        static void DrawField(int sideSize, Point position, String tankSign) {
+            String borderSign = "#";
+            String whitewpace = " ";
+            for (int i = 0; i < sideSize; i++)
+            {
+                Console.WriteLine();
+                for (int j = 0; j < sideSize; j++)
+                {
+                    if ((i == 0) || (i == sideSize - 1) || (j == 0) || (j == sideSize - 1))
+                    {
+                        Console.Write(borderSign);
+                    } else if (i == position.GetX() && j == position.GetY()) {
+                        Console.Write(tankSign);
+                    }
+                    else
+                    {
+                        Console.Write(whitewpace);
+                    }
                 }
             }
         }
-
-
     }
 }
